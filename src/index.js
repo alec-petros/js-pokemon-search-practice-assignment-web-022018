@@ -1,25 +1,25 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-  const pokemonArray = [];
-  const searchForm = document.getElementById('pokemon-search-form')
+  const searchForm = document.getElementById('pokemon-search-form');
+  const pokemonContainer = document.getElementById('pokemon-container');
+  // debugger
+  let searchResults = [];
+
+  pokemonContainer.addEventListener('click', e => renderApp())
 
   searchForm.addEventListener('keyup', e => {
-    alert(e.target.value)
+    if (e.target.value.length > 0) {
+      searchResults = pokemonArray.filter(poke => poke.name.includes(e.target.value));
+      renderApp();
+    } else {
+      searchResults = [];
+      renderApp();
+    }
   })
 
-  class Pokemon {
-    constructor(height, weight, order, name, abilities, moves, stats, types, sprites) {
-      this.height = height;
-      this.weight = weight;
-      this.order = order;
-      this.name = name;
-      this.abilities = abilities;
-      this.moves = moves;
-      this.stats = stats;
-      this.types = types;
-      this.sprites = sprites;
-      pokemonArray.push(this);
-    }
+  function renderApp() {
+    pokemonContainer.innerHTML = searchResults.map(poke => poke.render()).join('');
+    searchResults.map(poke => {poke.addFlipListener(), poke.addInfoListener(), poke.styleBox()});
   }
 
   pokemon["pokemons"].map(poke => new Pokemon(
@@ -33,6 +33,4 @@ document.addEventListener("DOMContentLoaded", function() {
     poke["types"],
     poke["sprites"],
   ))
-
-  console.log(pokemonArray);
 })
